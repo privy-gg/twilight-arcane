@@ -51,10 +51,9 @@ pub trait Queue: Debug + Send + Sync {
 /// A local, in-process implementation of [`Queue`] for bots with a
 /// `max_concurrency` of 1.
 ///
-/// Permits an `IDENTIFY` command every 6 seconds, regardless of the bot's
-/// `max_concurrency`, and does not account for the daily `IDENTIFY` limit. Use
-/// [`LargeBotQueue`] if your `max_concurrency` is greater than 1 or if this is
-/// otherwise not good enough.
+/// Permits an `IDENTIFY` command every 5 seconds, regardless of the bot's
+/// `max_concurrency`, and does not account for the daily `IDENTIFY` limit. See
+/// [`LargeBotQueue`] for an implementation with these features.
 #[derive(Debug)]
 pub struct LocalQueue {
     /// Notifier for when an identify command can be sent or when the associated

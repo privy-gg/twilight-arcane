@@ -19,7 +19,7 @@ use twilight_http::Client;
 
 /// An implementation of [`Queue`] for large bots.
 ///
-/// Permits an `IDENTIFY` command every 6 seconds per bucket (`max_concurrency`)
+/// Permits an `IDENTIFY` command every 5 seconds per bucket (`max_concurrency`)
 /// and accounts for the daily `IDENTIFY` limit.
 ///
 /// Calculates and recalculates the number of buckets on startup and when
