@@ -52,6 +52,8 @@ struct CreateAutoModerationRuleFieldsTriggerMetadata<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     allow_list: Option<&'a [&'a str]>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    regex_patterns: Option<&'a [&'a str]>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     keyword_filter: Option<&'a [&'a str]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     presets: Option<&'a [AutoModerationKeywordPresetType]>,
@@ -241,6 +243,7 @@ impl<'a> CreateAutoModerationRule<'a> {
     ) -> ResponseFuture<AutoModerationRule> {
         self.fields.trigger_metadata = Some(CreateAutoModerationRuleFieldsTriggerMetadata {
             allow_list: None,
+            regex_patterns: None,
             keyword_filter: Some(keyword_filter),
             presets: None,
             mention_total_limit: None,
@@ -276,6 +279,7 @@ impl<'a> CreateAutoModerationRule<'a> {
     ) -> ResponseFuture<AutoModerationRule> {
         self.fields.trigger_metadata = Some(CreateAutoModerationRuleFieldsTriggerMetadata {
             allow_list: Some(allow_list),
+            regex_patterns: None,
             keyword_filter: None,
             presets: Some(presets),
             mention_total_limit: None,
@@ -313,6 +317,7 @@ impl<'a> CreateAutoModerationRule<'a> {
 
         self.fields.trigger_metadata = Some(CreateAutoModerationRuleFieldsTriggerMetadata {
             allow_list: None,
+            regex_patterns: None,
             keyword_filter: None,
             presets: None,
             mention_total_limit: Some(mention_total_limit),
@@ -321,6 +326,32 @@ impl<'a> CreateAutoModerationRule<'a> {
         self.fields.trigger_type = Some(AutoModerationTriggerType::MentionSpam);
 
         Ok(self.exec())
+    }
+
+    /// Create the request with the trigger type [`Keyword`], then execute it.
+    ///
+    /// Rules of this type require the `keyword_filter` field specified, and
+    /// this method ensures this. See [Discord Docs/Keyword Matching Strategies]
+    /// and [Discord Docs/Trigger Metadata].
+    ///
+    /// [`Keyword`]: AutoModerationTriggerType::Keyword
+    /// [Discord Docs/Keyword Matching Strategies]: https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-keyword-matching-strategies
+    /// [Discord Docs/Trigger Metadata]: https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-trigger-metadata
+    pub fn with_regex_patterns(
+        mut self,
+        regex_patterns: &'a [&'a str],
+    ) -> ResponseFuture<AutoModerationRule> {
+        self.fields.trigger_metadata = Some(CreateAutoModerationRuleFieldsTriggerMetadata {
+            allow_list: None,
+            regex_patterns: Some(regex_patterns),
+            keyword_filter: None,
+            presets: None,
+            mention_total_limit: None,
+        });
+
+        self.fields.trigger_type = Some(AutoModerationTriggerType::Keyword);
+
+        self.exec()
     }
 
     /// Execute the request, returning a future resolving to a [`Response`].

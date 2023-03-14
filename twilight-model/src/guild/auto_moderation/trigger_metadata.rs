@@ -11,6 +11,9 @@ pub struct AutoModerationTriggerMetadata {
     /// Substrings that will be exempt from triggering the preset type.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_list: Option<Vec<String>>,
+    /// Regular expression patterns which will be matched against content (Maximum of 10)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_patterns: Option<Vec<String>>,
     /// Substrings which will be searched for in content.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub keyword_filter: Option<Vec<String>>,
@@ -23,6 +26,9 @@ pub struct AutoModerationTriggerMetadata {
     /// [Discord Docs/Keyword Matching Strategies]: https://discord.com/developers/docs/resources/auto-moderation#auto-moderation-rule-object-keyword-matching-strategies
     #[serde(skip_serializing_if = "Option::is_none")]
     pub presets: Option<Vec<AutoModerationKeywordPresetType>>,
+    /// Total number of unique role and user mentions allowed per message (Maximum of 50)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mention_total_limit: Option<u8>,
 }
 
 #[cfg(test)]
@@ -50,12 +56,14 @@ mod tests {
     fn trigger_metadata() {
         let value = AutoModerationTriggerMetadata {
             allow_list: Some(Vec::from(["heck".into()])),
+            regex_patterns: None,
             keyword_filter: Some(Vec::from(["shoot".into(), "darn".into()])),
             presets: Some(Vec::from([
                 AutoModerationKeywordPresetType::Profanity,
                 AutoModerationKeywordPresetType::SexualContent,
                 AutoModerationKeywordPresetType::Slurs,
             ])),
+            mention_total_limit: None,
         };
 
         serde_test::assert_ser_tokens(
