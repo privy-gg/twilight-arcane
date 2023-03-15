@@ -340,9 +340,10 @@ impl<'a> CreateAutoModerationRule<'a> {
     pub fn with_regex_patterns(
         mut self,
         regex_patterns: &'a [&'a str],
+        allow_list: &'a [&'a str],
     ) -> ResponseFuture<AutoModerationRule> {
         self.fields.trigger_metadata = Some(CreateAutoModerationRuleFieldsTriggerMetadata {
-            allow_list: None,
+            allow_list: Some(allow_list),
             regex_patterns: Some(regex_patterns),
             keyword_filter: None,
             presets: None,
