@@ -149,6 +149,7 @@ mod tests {
                 keyword_filter: Some(Vec::from(["shoot".into(), "darn".into()])),
                 presets: None,
                 mention_total_limit: None,
+                mention_raid_protection_enabled: None,
             },
             trigger_type: AutoModerationTriggerType::Keyword,
         };

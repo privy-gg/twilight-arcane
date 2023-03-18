@@ -29,6 +29,8 @@ pub struct AutoModerationTriggerMetadata {
     /// Total number of unique role and user mentions allowed per message (Maximum of 50)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mention_total_limit: Option<u8>,
+    /// A thing
+    pub mention_raid_protection_enabled: Option<bool>,
 }
 
 #[cfg(test)]
@@ -64,6 +66,7 @@ mod tests {
                 AutoModerationKeywordPresetType::Slurs,
             ])),
             mention_total_limit: None,
+            mention_raid_protection_enabled: None,
         };
 
         serde_test::assert_ser_tokens(
